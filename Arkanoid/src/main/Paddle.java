@@ -17,8 +17,10 @@ public class Paddle extends GameObject implements Renderable {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.BLUE);
-        g.fillRect(x, y, width, height);
+        g.setColor(new Color(200, 200, 255));
+        g.fillRoundRect((int)x, (int)y, width, height, 10, 10);
+        g.setColor(Color.WHITE);
+        g.drawRoundRect((int)x, (int)y, width, height, 10, 10);
     }
 
     public void move(int dx) {

@@ -7,10 +7,21 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private ScoreBoard scoreBoard;
-    int windowWith = 500;
-    int windowHeight = 400;
+     int windowWith = 500;
+     int windowHeight = 400;
     public GameManager() {
         reset();
+    }
+    public void createbrick(int rows, int cols, int startX, int startY, int spacing){
+        bricks.clear();
+        for( int i = 0 ; i<rows; i++){
+            for(int j = 0 ; j< cols ; j++){
+                int x = i*(60+spacing);
+                int y = j*25 + spacing;
+                String type = (Math.random() < 0.2) ? "strong" : "normal";
+                bricks.add(BrickFactory.createBrick(type, x, y));
+            }
+        }
     }
 
     public void reset() {
@@ -20,25 +31,32 @@ public class GameManager {
         bricks = new ArrayList<>();
 
         // Create some bricks
-        for (int i = 0; i < 5; i++) {
-            bricks.add(BrickFactory.createBrick("normal", 60 * i + 10, 50));
-        }
+        createbrick(7,5,10,50,30);
     }
 
     public void update() {
-        
         ball.update();
         if((ball.getY()+ball.height>=paddle.getY())&&(ball.getX()>=paddle.getX()
-        &&ball.getX()<paddle.getX()+paddle.width)) ball.bounceY();//check paddle and ball  collision
+        &&ball.getX()<=paddle.getX()+paddle.width)) ball.bounceY();//check paddle and ball  collision
         for(Brick b: bricks){
             if(b.isDestroyed()) continue;
-           if((ball.getY()<=b.getY()+b.height)&&
-           (ball.getX()>b.getX()&&ball.getX()<=b.getX()+b.width)){ball.bounceY(); b.hit();} 
-           else if(ball.getY()+ball.height>=b.getY()&&ball.getY()+ball.height<b.getY()+b.height&&
-           (ball.getX()>b.getX()&&ball.getX()<=b.getX()+b.width)){ball.bounceY(); b.hit();} 
+            if (ball.intersects(b)) {
+                // Tính độ chồng (overlap) theo hai trục
+                double overlapX = Math.min(ball.x + ball.width - b.x, b.x + b.width - ball.x);
+                double overlapY = Math.min(ball.y + ball.height - b.y, b.y + b.height - ball.y);
+                // Nảy theo hướng có độ chồng nhỏ hơn (tức là hướng tiếp xúc trước)
+                if (overlapX < overlapY) {
+                    ball.bounceX();  // Nảy theo trục X
+                } else {
+                    ball.bounceY();  // Nảy theo trục Y
+                }
+                scoreBoard.addScore();
+                b.hit();
+            }
+
         }// check bricks and ball collision
         bricks.removeIf(Brick::isDestroyed);
-        
+        System.out.println(scoreBoard.getScore());
     }
 
     public Ball getBall() { return ball; }

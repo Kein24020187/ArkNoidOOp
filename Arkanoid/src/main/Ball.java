@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Ball extends GameObject implements Renderable {
-    private int dx = 3, dy = -3;
+    private int dx = 1, dy = -1;
     int windowWith,windowHeight;
     public Ball(int x, int y, int size,int windowWith,int windowHeight) {
         super(x, y, size, size);
@@ -23,8 +23,14 @@ public class Ball extends GameObject implements Renderable {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(Color.CYAN);
         g.fillOval(x, y, width, height);
+    }
+    public boolean intersects(Brick b) {
+        return this.x < b.x + b.width &&
+                this.x + this.width > b.x &&
+                this.y < b.y + b.height &&
+                this.y + this.height > b.y;
     }
 
     public void bounceX() { dx = -dx; }

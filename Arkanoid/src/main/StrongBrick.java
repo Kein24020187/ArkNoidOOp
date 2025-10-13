@@ -10,7 +10,13 @@ public class StrongBrick extends Brick {
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
+        if(health == 3){
+        g.setColor(Color.DARK_GRAY);} else if (health == 2) {
+            g.setColor(Color.BLUE);
+        }
+        else{
+            g.setColor(Color.ORANGE);
+        }
         g.fillRect(x, y, width, height);
     }
 
