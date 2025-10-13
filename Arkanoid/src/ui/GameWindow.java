@@ -1,0 +1,61 @@
+package ui;
+
+import main.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class GameWindow extends JPanel implements ActionListener, KeyListener {
+    private Timer timer;
+    private GameManager game;
+    private boolean leftPressed = false;
+    private boolean rightPressed = false;
+
+    public GameWindow() {
+        game = new GameManager();
+        timer = new Timer(8, this); // 60 FPS
+        timer.start();
+
+        setFocusable(true);
+        addKeyListener(this);
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        game.getBall().draw(g);
+        game.getPaddle().draw(g);
+        for (Brick b : game.getBricks()) b.draw(g);
+
+        g.setColor(Color.BLACK);
+        g.drawString("Score: " + game.getScoreBoard().getScore(), 10, 20);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Handle continuous paddle movement
+        if (leftPressed) game.getPaddle().move(-10);
+        if (rightPressed) game.getPaddle().move(10);
+
+        game.update(); // Ball, collisions, etc.
+        repaint();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) leftPressed = true;
+        if (key == KeyEvent.VK_RIGHT) rightPressed = true;
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_LEFT) leftPressed = false;
+        if (key == KeyEvent.VK_RIGHT) rightPressed = false;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+}
