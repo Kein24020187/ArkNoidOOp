@@ -1,6 +1,8 @@
 package ui;
 
 import main.*;
+import main.GameManager.GameState;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -22,14 +24,25 @@ public class GameWindow extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        switch(game.getCurrentState()){
+            case Playing: 
+                super.paintComponent(g);
 
-        game.getBall().draw(g);
-        game.getPaddle().draw(g);
-        for (Brick b : game.getBricks()) b.draw(g);
+                game.getBall().draw(g);
+                game.getPaddle().draw(g);
+                for (Brick b : game.getBricks()) b.draw(g);
 
-        g.setColor(Color.BLACK);
-        g.drawString("Score: " + game.getScoreBoard().getScore(), 10, 20);
+                g.setColor(Color.YELLOW);
+                g.drawString("Score: " + game.getScoreBoard().getScore(), 10, 20);
+                
+            break;
+            case GameOver:
+                g.setColor(Color.RED);
+                g.drawString("Game Over!",game.windowWith/2-50,game.windowHeight/2); 
+                
+            break;
+        }
+                     
     }
 
     @Override

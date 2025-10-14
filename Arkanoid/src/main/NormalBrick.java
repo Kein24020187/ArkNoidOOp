@@ -3,9 +3,11 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import static main.GameManager.windowWith;
+
 public class NormalBrick extends Brick {
     public NormalBrick(int x, int y) {
-        super(x, y, 60, 20, 1);
+        super(x, y, windowWith/13, windowWith/25, 1);
     }
 
     @Override
