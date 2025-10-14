@@ -3,9 +3,11 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import static main.GameManager.windowWith;
+
 public class StrongBrick extends Brick {
     public StrongBrick(int x, int y) {
-        super(x, y, 60, 20, 3);
+        super(x, y, windowWith/13, windowWith/25, 3);
     }
 
     @Override

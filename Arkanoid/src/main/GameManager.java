@@ -7,17 +7,19 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private ScoreBoard scoreBoard;
-     int windowWith = 500;
-     int windowHeight = 400;
+    public static final int windowWith = 800;
+    public static final int windowHeight = 600;
     public GameManager() {
         reset();
     }
-    public void createbrick(int rows, int cols, int startX, int startY, int spacing){
+    int startX = (windowWith - (windowWith/13 * 11) - (windowWith/195) * 10)/2;
+    int spacing = windowWith/165;
+    public void createbrick(int startX, int startY, int spacing){
         bricks.clear();
-        for( int i = 0 ; i<rows; i++){
-            for(int j = 0 ; j< cols ; j++){
-                int x = i*(60+spacing);
-                int y = j*25 + spacing;
+        for( int i = 0 ; i<11; i++){
+            for(int j = 0 ; j< 3 ; j++){
+                int x = startX + i*( windowWith/13+spacing);
+                int y = startY + j*(windowWith/25+spacing);
                 String type = (Math.random() < 0.2) ? "strong" : "normal";
                 bricks.add(BrickFactory.createBrick(type, x, y));
             }
@@ -25,14 +27,25 @@ public class GameManager {
     }
 
     public void reset() {
-        ball = new Ball(200, 300, 10,windowWith,windowHeight);
-        paddle = new Paddle(180, 350, 80, 10,windowWith);
+        paddle = new Paddle(windowWith / 2 - windowWith / 12,
+                windowHeight - windowHeight / 25,
+                windowWith / 6,
+                windowHeight / 35,
+                windowWith);
+
+        ball = new Ball(paddle.getX() + paddle.width / 2,
+                paddle.getY() - 10,
+                10,
+                windowWith,
+                windowHeight);
+
         scoreBoard = new ScoreBoard();
         bricks = new ArrayList<>();
 
-        // Create some bricks
-        createbrick(7,5,10,50,30);
+        // Tạo gạch với khoảng cách đẹp và vị trí chính xác
+        createbrick(startX,windowHeight/20,spacing);
     }
+
 
     public void update() {
         ball.update();
