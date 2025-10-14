@@ -4,11 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Ball extends GameObject implements Renderable {
-<<<<<<< HEAD
+
     private int dx = 3, dy = -3;
-=======
-    private int dx = 2, dy = -2;
->>>>>>> 3487c2ac69ea72e583fdd3862be295925f46b2c3
+
     int windowWith,windowHeight;
     public Ball(int x, int y, int size,int windowWith,int windowHeight) {
         super(x, y, size, size);

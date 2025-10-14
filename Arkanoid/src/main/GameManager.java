@@ -7,22 +7,8 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private ScoreBoard scoreBoard;
-<<<<<<< HEAD
-    public int windowWith = 500;
-    public int windowHeight = 400;
-    public enum GameState{
-        Menu,
-        Playing,
-        GameOver
-    }   
-    private GameState currentState =  GameState.Playing;
-    public GameState getCurrentState(){
-        return currentState;
-    }
-=======
-    public static final int windowWith = 800;
-    public static final int windowHeight = 600;
->>>>>>> 3487c2ac69ea72e583fdd3862be295925f46b2c3
+     int windowWith = 500;
+     int windowHeight = 400;
     public GameManager() {
         reset();
     }
