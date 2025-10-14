@@ -7,10 +7,20 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private ScoreBoard scoreBoard;
-    public static final int windowWith = 800;
-    public static final int windowHeight = 600;
+    public static int windowWith = 800;
+    public static int windowHeight = 600;
+    public enum GameState{
+        Playing,
+        GameOver,
+        Menu
+     }
+     GameState currentState = GameState.Playing;
     public GameManager() {
         reset();
+    }
+
+    public GameState getCurrentState(){
+        return currentState;
     }
     int startX = (windowWith - (windowWith/13 * 11) - (windowWith/195) * 10)/2;
     int spacing = windowWith/165;
@@ -48,28 +58,40 @@ public class GameManager {
 
 
     public void update() {
-        ball.update();
-        if((ball.getY()+ball.height>=paddle.getY())&&(ball.getX()>=paddle.getX()
-        &&ball.getX()<=paddle.getX()+paddle.width)) ball.bounceY();//check paddle and ball  collision
-        for(Brick b: bricks){
-            if(b.isDestroyed()) continue;
-            if (ball.intersects(b)) {
-                // Tính độ chồng (overlap) theo hai trục
-                double overlapX = Math.min(ball.x + ball.width - b.x, b.x + b.width - ball.x);
-                double overlapY = Math.min(ball.y + ball.height - b.y, b.y + b.height - ball.y);
-                // Nảy theo hướng có độ chồng nhỏ hơn (tức là hướng tiếp xúc trước)
-                if (overlapX < overlapY) {
-                    ball.bounceX();  // Nảy theo trục X
-                } else {
-                    ball.bounceY();  // Nảy theo trục Y
-                }
-                scoreBoard.addScore();
-                b.hit();
-            }
+        switch (currentState) {
+            case Playing:
+                ball.update();
+                if((ball.getY()+ball.height>=paddle.getY())&&(ball.getX()>=paddle.getX()
+                &&ball.getX()<=paddle.getX()+paddle.width)) ball.bounceY();//check paddle and ball  collision
+                for(Brick b: bricks){
+                    if(b.isDestroyed()) continue;
+                    if (ball.intersects(b)) {
+                        // Tính độ chồng (overlap) theo hai trục
+                        double overlapX = Math.min(ball.x + ball.width - b.x, b.x + b.width - ball.x);
+                        double overlapY = Math.min(ball.y + ball.height - b.y, b.y + b.height - ball.y);
+                        // Nảy theo hướng có độ chồng nhỏ hơn (tức là hướng tiếp xúc trước)
+                        if (overlapX < overlapY) {
+                            ball.bounceX();  // Nảy theo trục X
+                        } else {
+                            ball.bounceY();  // Nảy theo trục Y
+                        }
+                        scoreBoard.addScore();
+                        b.hit();
+                    }
 
-        }// check bricks and ball collision
-        bricks.removeIf(Brick::isDestroyed);
-        System.out.println(scoreBoard.getScore());
+                }// check bricks and ball collision
+                bricks.removeIf(Brick::isDestroyed);
+
+                if(ball.getY()+ball.height>=windowHeight){
+                    currentState = GameState.GameOver;
+                    getCurrentState();
+                } 
+                break;
+            case GameOver:
+                
+            default:
+                break;
+        }
     }
 
     public Ball getBall() { return ball; }

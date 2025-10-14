@@ -22,20 +22,30 @@ public class GameWindow extends JPanel implements ActionListener, KeyListener {
 
     @Override
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        GradientPaint gradient = new GradientPaint(
-                0, 0, new Color(20, 10, 40),    // tím đậm ở trên
-                0, getHeight(), new Color(0, 0, 10) // đen ở dưới
-        );
-        g2d.setPaint(gradient);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
-        game.getBall().draw(g);
-        game.getPaddle().draw(g);
-        for (Brick b : game.getBricks()) b.draw(g);
+        switch(game.getCurrentState()){
+            case Playing:
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gradient = new GradientPaint(
+                        0, 0, new Color(20, 10, 40),    // tím đậm ở trên
+                        0, getHeight(), new Color(0, 0, 10) // đen ở dưới
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                game.getBall().draw(g);
+                game.getPaddle().draw(g);
+                for (Brick b : game.getBricks()) b.draw(g);
 
-        g.setColor(Color.ORANGE);
-        g.drawString("Score: " + game.getScoreBoard().getScore(), 10, 20);
+                g.setColor(Color.ORANGE);
+                g.drawString("Score: " + game.getScoreBoard().getScore(), 10, 20);
+
+                break;
+            case GameOver:
+                g.setColor(Color.RED);
+                g.drawString("Game Over!",game.windowWith/2-50,game.windowHeight/2);
+
+                break;
+        }
     }
 
     @Override
