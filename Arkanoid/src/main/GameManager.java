@@ -34,8 +34,8 @@ public class GameManager {
                 windowWith);
 
         ball = new Ball(paddle.getX() + paddle.width / 2,
-                paddle.getY() - 10,
-                10,
+                paddle.getY() - windowWith/60,
+                windowWith/60,
                 windowWith,
                 windowHeight);
 

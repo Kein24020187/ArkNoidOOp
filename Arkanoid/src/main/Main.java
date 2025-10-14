@@ -12,7 +12,6 @@ public class Main {
         JFrame frame = new JFrame("Arkanoid Game");
         GameWindow panel = new GameWindow();
         panel.setPreferredSize(new Dimension(windowWith, windowHeight));
-        panel.setBackground(Color.black);
         frame.add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
