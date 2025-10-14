@@ -1,7 +1,7 @@
 package ui;
 
 import main.*;
-import main.GameManager.GameState;
+
 
 import javax.swing.*;
 import java.awt.*;

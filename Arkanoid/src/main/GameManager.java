@@ -7,10 +7,20 @@ public class GameManager {
     private Paddle paddle;
     private List<Brick> bricks;
     private ScoreBoard scoreBoard;
-     int windowWith = 500;
-     int windowHeight = 400;
+    public static int windowWith = 500;
+    public static int windowHeight = 400;
+    public enum GameState{
+        Playing,
+        GameOver,
+        Menu
+     }
+     GameState currentState = GameState.Playing;
     public GameManager() {
         reset();
+    }
+
+    public GameState getCurrentState(){
+        return currentState;
     }
     int startX = (windowWith - (windowWith/13 * 11) - (windowWith/195) * 10)/2;
     int spacing = windowWith/165;
