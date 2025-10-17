@@ -9,19 +9,26 @@ public class GameManager {
     private ScoreBoard scoreBoard;
     public static int windowWith = 800;
     public static int windowHeight = 600;
-    public enum GameState{
+    static public enum GameState{
         Playing,
         GameOver,
         Menu
      }
-     GameState currentState = GameState.Playing;
-    public GameManager() {
-        reset();
-    }
+    GameState currentState = GameState.Menu;
 
     public GameState getCurrentState(){
         return currentState;
     }
+
+    public void startGame(){
+        currentState = GameState.Playing;
+    }// helper function help change update private variable
+
+    public GameManager() {
+        reset();
+    }
+
+    
     int startX = (windowWith - (windowWith/13 * 11) - (windowWith/195) * 10)/2;
     int spacing = windowWith/165;
     public void createbrick(int startX, int startY, int spacing){
@@ -30,8 +37,14 @@ public class GameManager {
             for(int j = 0 ; j< 3 ; j++){
                 int x = startX + i*( windowWith/13+spacing);
                 int y = startY + j*(windowWith/25+spacing);
-                String type = (Math.random() < 0.2) ? "strong" : "normal";
-                bricks.add(BrickFactory.createBrick(type, x, y));
+                String type = (Math.random() < 0.2) ? "other" : "normal";
+                String other = ((Math.random() < 0.5) ? "immortal" : "strong");
+                if(type == "normal") {
+                    bricks.add(BrickFactory.createBrick(type, x, y));
+                }
+                else{
+                    bricks.add(BrickFactory.createBrick(other, x, y));
+                }
             }
         }
     }
