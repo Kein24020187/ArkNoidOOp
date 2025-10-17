@@ -45,6 +45,14 @@ public class GameWindow extends JPanel implements ActionListener, KeyListener {
                 g.drawString("Game Over!",game.windowWith/2-50,game.windowHeight/2);
 
                 break;
+            case Menu:
+                g.setColor(Color.BLACK);
+                g.setFont(new Font("Arial", Font.BOLD, 24));
+                g.drawString("ARKANOID", game.windowWith / 2 - 70, game.windowHeight / 2 - 30);
+                g.setFont(new Font("Arial", Font.PLAIN, 16));
+                g.drawString("Press SPACE to Start", game.windowWith / 2 - 80, game.windowHeight / 2);
+                break;
+            
         }
     }
 
@@ -63,6 +71,10 @@ public class GameWindow extends JPanel implements ActionListener, KeyListener {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT) leftPressed = true;
         if (key == KeyEvent.VK_RIGHT) rightPressed = true;
+
+        if(game.getCurrentState() == GameManager.GameState.Menu&&key == KeyEvent.VK_SPACE){
+            game.startGame();
+        }
     }
 
     @Override

@@ -1,0 +1,4 @@
+# Highscores
+# format: name,score
+Alice,10000
+Bob,7500
