@@ -1,22 +1,39 @@
 package ui;
 
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import main.GameManager;
 import main.Brick;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class GameWindow extends Pane {
-
+    private int currentSelection = 0;
+    private boolean blink = true;
     private Canvas canvas;
     private GraphicsContext gc;
     private GameManager game;
     private boolean leftPressed = false;
     private boolean rightPressed = false;
+
+    private void setupBlinkingEffect() {
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.seconds(0.5), e -> blink = !blink)
+        );
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
 
     public GameWindow(int width, int height) {
         setPrefSize(width, height);
@@ -25,21 +42,40 @@ public class GameWindow extends Pane {
         getChildren().add(canvas);
 
         game = new GameManager();
-
+        setupBlinkingEffect();
         // Key events
         setOnKeyPressed((KeyEvent e) -> {
             switch (e.getCode()) {
                 case LEFT -> leftPressed = true;
                 case RIGHT -> rightPressed = true;
+
+                // Điều khiển menu khi đang ở trạng thái MENU
+                case UP -> {
+                    if (game.getCurrentState() == GameManager.GameState.Menu) {
+                        currentSelection = (currentSelection - 1 + 3) % 3;
+                    }
+                }
+                case DOWN -> {
+                    if (game.getCurrentState() == GameManager.GameState.Menu) {
+                        currentSelection = (currentSelection + 1) % 3;
+                    }
+                }
                 case SPACE -> {
-                    if (game.getCurrentState() != GameManager.GameState.Playing) {
-                        game.reset();
-                        game.startGame();
+                    if (game.getCurrentState() == GameManager.GameState.Menu) {
+                        if (currentSelection == 0) game.startGame();
+                        else if (currentSelection == 1) System.out.println("oke");
+                        else if (currentSelection == 2) System.out.println("oke");;
+                    } else {
+                        if (game.getCurrentState() != GameManager.GameState.Playing) {
+                            game.reset();
+                            game.startGame();
+                        }
                     }
                 }
                 default -> {}
             }
         });
+
 
         setOnKeyReleased((KeyEvent e) -> {
             switch (e.getCode()) {
@@ -48,6 +84,8 @@ public class GameWindow extends Pane {
                 default -> {}
             }
         });
+
+        
 
         // Game loop
         AnimationTimer timer = new AnimationTimer() {
@@ -96,12 +134,34 @@ public class GameWindow extends Pane {
                 gc.fillText("Game Over!", GameManager.windowWith/2-50, GameManager.windowHeight/2);
             }
             case Menu -> {
-                gc.setFill(Color.WHITE);
-                gc.setFont(Font.font("Arial", 24));
-                gc.fillText("ARKANOID", GameManager.windowWith / 2 - 70, GameManager.windowHeight / 2 - 30);
-                gc.setFont(Font.font("Arial", 16));
-                gc.fillText("Press SPACE to Start", GameManager.windowWith / 2 - 80, GameManager.windowHeight / 2);
+                // Load ảnh 1 lần (nên đưa ra ngoài để không load liên tục)
+                Image background = new Image(getClass().getResource("/images/menu_bg.jpg").toExternalForm());
+
+                // Vẽ ảnh phủ màn hình
+                gc.drawImage(background, 0, 0, canvas.getWidth(), canvas.getHeight());
+
+                // Vẽ chữ phía trên
+                // Vẽ nền mờ sau chữ
+                // 
+                String[] menuItems = {"Start Game", "Settings", "Instruction"};
+                double startX = GameManager.windowWith / 2 - 55;
+                double startY = GameManager.windowHeight / 2 - 30;
+                
+
+                for (int i = 0; i < menuItems.length; i++) {
+                    if (i == currentSelection) {
+                        if (blink) { // chỉ vẽ khi hiệu ứng bật
+                            gc.setFill(Color.YELLOW); // mục đang chọn (nổi bật)
+                            gc.fillText("> " + menuItems[i], startX, startY + i * 40);
+                        }
+                    } else {
+                        gc.setFill(Color.WHITE);
+                        gc.fillText("  " + menuItems[i], startX, startY + i * 40);
+                    }
+                }
+
             }
+
         }
     }
 }
